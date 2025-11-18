@@ -87,12 +87,59 @@ def browse_folder():
         folder_entry.delete(0, tk.END)
         folder_entry.insert(0, folder_selected)
 
+
+# ------------ Splash Screen ------------ #
+
+# ------------ Splash Screen ------------ #
+
+def show_splash(root):
+    splash = tk.Toplevel()
+    splash.overrideredirect(True)
+    splash.configure(bg="#1e1e1e")
+
+    # Splash window size
+    w, h = 400, 200
+
+    # Center splash window
+    ws = splash.winfo_screenwidth()
+    hs = splash.winfo_screenheight()
+    x = int((ws / 2) - (w / 2))
+    y = int((hs / 2) - (h / 2))
+    splash.geometry(f"{w}x{h}+{x}+{y}")
+
+    label = tk.Label(
+        splash,
+        text="FOS Client Extractor\nLoading...",
+        font=("Arial", 16, "bold"),
+        bg="#1e1e1e",
+        fg="white"
+    )
+    label.pack(expand=True)
+
+    # After 2 seconds → hide splash, show main window in SAME spot
+    root.after(2000, lambda: finish_splash(root, splash, x, y))
+
+
+def finish_splash(root, splash, x, y):
+    splash.destroy()
+
+    # Set main window to appear where the splash was
+    root.geometry(f"+{x}+{y}")
+
+    root.deiconify()
+
+
 # ---------------- GUI ---------------- #
 
 root = tk.Tk()
+root.withdraw()  # Hide main window at startup
+
+show_splash(root)  # Show splash screen
+
 root.title("FOS Client Extractor")
 root.geometry("650x480")
 root.configure(bg=BG)
+
 
 # Folder selection
 folder_label = tk.Label(root, text="Select PDF Folder:", font=("Arial", 11), bg=BG, fg=FG)
